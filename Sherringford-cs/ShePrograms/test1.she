@@ -1,0 +1,14 @@
+str = "rokko physics club"
+let x = 0.1
+let i = 0
+
+while (i < 10) {
+	x = x + i
+	i = i + 1
+}
+
+if (x == 0) {
+		x = 100
+}
+
+x

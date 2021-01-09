@@ -1,0 +1,29 @@
+﻿Sherringford文法定義
+
+・LL(1)で解析する
+・右再帰のみ
+
+---基礎---
+primary       := ( "(" expr ")" | NUMBER | IDENTIFIER | STRING ) { postfix }
+factor        := "-" primary | primary
+expr          := factor { OP factor }
+block         := "{" [ statement ] {(";" | EOL) [ statement ]} "}"
+simple        := expr [ args ]
+variable      := "var" IDENTIFIER "=" expr
+statement     := "if" expr block [ "else" block ]
+                 | "while" expr block
+                 | variable
+                 | simple
+module        := [ def | statement ] (";" | EOL)
+program       := module { module } EOF
+
+---関数---
+param         := IDENTIFIER
+params        := param { "," param }
+param_list    := "(" [ params ] ")"
+def           := "fun" IDENTIFIER param_list block
+args          := expr { "," expr }
+postfix       := "(" [ args ] ")"
+
+---クラス---
+throw new NotImplementedException();
