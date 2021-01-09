@@ -27,31 +27,4 @@ namespace Sherringford.She
         public override bool Exist(string key) => values.ContainsKey(key);
         public override object Get(string key) => values[key];
     }
-
-    class NestedEnvironment : Environment
-    {
-        private Environment outer;
-        private Dictionary<string, object> values;
-
-        public NestedEnvironment() : this(null) { }
-        public NestedEnvironment(Environment outer)
-        {
-            this.outer = outer;
-        }
-
-        public override void Put(string key, object value)
-        {
-            if (!Exist(key)) values.Add(key, value);
-            else values[key] = value;
-        }
-
-        public override bool Exist(string key) => values.ContainsKey(key);
-
-        public override object Get(string key) => values[key];
-
-        public Environment Where(string key)
-        {
-
-        }
-    }
 }
