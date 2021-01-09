@@ -22,11 +22,12 @@ namespace Sherringford.She.Ast
         public override object Eval(Environment env)
         {
             object ret = null;
-            ((ForIterExpr)IterControl()).Define().Eval(env);
-            while ((int)((ForIterExpr)IterControl()).Condition().Eval(env) == Environment.True)
+            NestedEnvironment newScope = new NestedEnvironment(env);
+            ((ForIterExpr)IterControl()).Define().Eval(newScope);
+            while ((int)((ForIterExpr)IterControl()).Condition().Eval(newScope) == Environment.True)
             {
-                ret = ForBody().Eval(env);
-                ((ForIterExpr)IterControl()).Next().Eval(env);
+                ret = ForBody().Eval(newScope);
+                ((ForIterExpr)IterControl()).Next().Eval(newScope);
             }
             return ret;
         }
