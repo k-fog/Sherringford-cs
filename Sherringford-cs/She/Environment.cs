@@ -8,10 +8,12 @@ namespace Sherringford.She
     {
         public static readonly int True = 1, False = 0;
         public abstract void Put(string key, object value);
+        public abstract void PutNew(string key, object value);
         public abstract bool Exist(string key);
         public abstract object Get(string key);
     }
 
+    // old
     class BasicEnvironment : Environment
     {
         private Dictionary<string, object> values;
@@ -24,25 +26,35 @@ namespace Sherringford.She
             if (!Exist(key)) values.Add(key, value);
             else values[key] = value;
         }
+        public override void PutNew(string key, object value)
+        {
+            throw new NotImplementedException();
+        }
         public override bool Exist(string key) => values.ContainsKey(key);
         public override object Get(string key) => values[key];
     }
 
     class NestedEnvironment : Environment
     {
-        private Environment outer;
-        private Dictionary<string, object> values;
+        public Environment Outer { set; get; }
+        protected Dictionary<string, object> values;
 
         public NestedEnvironment() : this(null) { }
         public NestedEnvironment(Environment outer)
         {
-            this.outer = outer;
+            this.values = new Dictionary<string, object>();
+            this.Outer = outer;
         }
 
         public override void Put(string key, object value)
         {
-            if (!Exist(key)) values.Add(key, value);
-            else values[key] = value;
+            Environment e = Where(key) ?? this;
+            ((NestedEnvironment)e).PutNew(key, value);
+        }
+
+        public override void PutNew(string key, object value)
+        {
+            values[key] = value;
         }
 
         public override bool Exist(string key) => values.ContainsKey(key);
@@ -51,7 +63,8 @@ namespace Sherringford.She
 
         public Environment Where(string key)
         {
-
+            if (values.ContainsKey(key)) return this;
+            return ((NestedEnvironment)Outer)?.Where(key);
         }
     }
 }

@@ -10,10 +10,11 @@ namespace Sherringford.She.Ast
         public override object Eval(Environment env)
         {
             object ret = null;
+            NestedEnvironment newScope = new NestedEnvironment(env);
             foreach(var stmnt in this)
             {
                 if (stmnt.GetType() == typeof(NullStmnt)) continue;
-                ret = stmnt.Eval(env);
+                ret = stmnt.Eval(newScope);
             }
             return ret;
         }

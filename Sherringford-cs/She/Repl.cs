@@ -15,7 +15,7 @@ namespace Sherringford.She
 
         public Repl()
         {
-            this.replEnvironment = new BasicEnvironment();
+            this.replEnvironment = new NestedEnvironment();
         }
 
         public void Start()
