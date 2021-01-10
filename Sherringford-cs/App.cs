@@ -14,7 +14,7 @@ namespace Sherringford
         public static string Environment { private set; get; }
         public static string UserName { private set; get; }
         public static string ExePath { private set; get; }
-        public static bool Visualize { set; get; } = true;
+        public static bool Visualize { set; get; } = false;
         public static string TempDirectory { set; get; } = @".\output";
         public static bool Setup()
         {

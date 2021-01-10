@@ -50,7 +50,7 @@ namespace Sherringford.She
                     Console.WriteLine($"{lexer.Peek(0).GetType()}:{lexer.Read()}");
                 }*/
 
-                
+
                 SheParser parser = new SheParser();
                 ASTree ast = parser.Parse(lexer);
 
@@ -59,7 +59,7 @@ namespace Sherringford.She
                 Console.WriteLine(ast.Eval(replEnvironment));
                 Console.WriteLine();
             }
-            visualizer.Visualize($"REPL_{SheInfo.StartTime:yyyy-MM-dd-HH-mm-ss}");
+            if (SheInfo.Visualize) visualizer.Visualize($"REPL_{SheInfo.StartTime:yyyy-MM-dd-HH-mm-ss}");
         }
 
         private void WriteSystemMessage(string s)

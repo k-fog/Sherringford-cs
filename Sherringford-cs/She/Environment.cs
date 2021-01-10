@@ -57,9 +57,13 @@ namespace Sherringford.She
             values[key] = value;
         }
 
-        public override bool Exist(string key) => values.ContainsKey(key);
+        public override bool Exist(string key) => Where(key) != null;
 
-        public override object Get(string key) => values[key];
+        public override object Get(string key)
+        {
+            if (values.ContainsKey(key)) return values[key];
+            return Outer?.Get(key);
+        }
 
         public Environment Where(string key)
         {

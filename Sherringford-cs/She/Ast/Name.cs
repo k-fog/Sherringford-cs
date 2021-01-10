@@ -11,7 +11,8 @@ namespace Sherringford.She.Ast
         public override object Eval(Environment env)
         {
             if (!env.Exist(TheName())) throw new SheException($"{TheName()} doesnt exist :", this);
-            return env.Get(TheName());
+            Environment e = ((NestedEnvironment)env).Where(TheName());
+            return e.Get(TheName());
         }
     }
 }

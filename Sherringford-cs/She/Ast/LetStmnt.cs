@@ -13,7 +13,7 @@ namespace Sherringford.She.Ast
 
         public override object Eval(Environment env)
         {
-            if (env.Exist(Name().ToString())) throw new SheException($"{Name()} already exists :", this);
+            if (((NestedEnvironment)env).Where(Name().ToString()) == env) throw new SheException($"{Name()} already exists :", this);
             object v = Value().Eval(env);
             env.Put(((Name)Name()).TheName(), v);
             return v;
