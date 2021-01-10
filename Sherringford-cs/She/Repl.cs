@@ -10,7 +10,6 @@ namespace Sherringford.She
     {
         private readonly string startMessage = $"Welcome to Sherringford {SheInfo.Version}, {SheInfo.UserName} !!! ({SheInfo.StartTime})\n[on {SheInfo.Environment}]";
         private readonly string prompt = "=>";
-        private static int Count = 0;
         private Environment replEnvironment;
 
         public Repl()
@@ -22,6 +21,7 @@ namespace Sherringford.She
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(startMessage);
+            ASTVisualizer visualizer = SheInfo.Visualize ? new ASTVisualizer() : null;
             while (true)
             {
                 WriteSystemMessage(prompt);
@@ -54,11 +54,12 @@ namespace Sherringford.She
                 SheParser parser = new SheParser();
                 ASTree ast = parser.Parse(lexer);
 
-                if (SheInfo.Visualize) ASTVisualizer.Visualize(ast.PlotDotGraph(), $"REPL_{SheInfo.StartTime:yyyy-MM-dd-HH-mm-ss}_{Count++}");
+                if (SheInfo.Visualize) visualizer.Push(ast);
                 // Console.WriteLine(ast);
                 Console.WriteLine(ast.Eval(replEnvironment));
                 Console.WriteLine();
             }
+            visualizer.Visualize($"REPL_{SheInfo.StartTime:yyyy-MM-dd-HH-mm-ss}");
         }
 
         private void WriteSystemMessage(string s)
