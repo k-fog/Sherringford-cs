@@ -52,6 +52,7 @@ namespace Sherringford.She.Ast
 
     class ASTVisualizer
     {
+        private static readonly string htmlTemplate = @"<!DOCTYPE html><meta charset=""utf-8""><body><script src=""https://d3js.org/d3.v5.min.js""></script><script src=""https://unpkg.com/viz.js@1.8.1/viz.js"" type=""javascript/worker""></script><script src=""https://unpkg.com/d3-graphviz@2.1.0/build/d3-graphviz.min.js""></script><div id=""graph"" style=""text-align: center;""></div><script>var graphviz = d3.select(""#graph"").graphviz().fade(true).renderDot(""{0}"");</script></body>";
         private StringBuilder top, body;
 
         public ASTVisualizer()
@@ -92,13 +93,11 @@ namespace Sherringford.She.Ast
                 dotFile.Write(source);
                 dotFile.WriteLine("}");
             }
-            string font = "Ricty Diminished Discord";
-            ProcessStartInfo pInfo = new ProcessStartInfo();
-            pInfo.FileName = @$"{SheInfo.ExePath}\Graphviz\bin\dot.exe";
-            pInfo.Arguments = $"{fileName}.dot -Gdpi=300 -Kdot -Nfontname=\"{font}\" -Efontname=\"{font}\" -Gfontname=\"{font}\" -T png -o {fileName}.png";
-            pInfo.UseShellExecute = true;
-
-            Process.Start(pInfo);
+            using (var htmlFile = new StreamWriter(fileName + ".html", false))
+            using (var dotFile = new StreamReader(fileName + ".dot", false))
+            {
+                htmlFile.WriteLine(string.Format(htmlTemplate, Regex.Escape(dotFile.ReadToEnd()).Replace("\"", @"\""")));
+            }
         }
     }
 }
