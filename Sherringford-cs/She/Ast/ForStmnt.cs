@@ -7,7 +7,7 @@ namespace Sherringford.She.Ast
     class ForStmnt : ASTList
     {
         public ForStmnt(List<ASTree> c) : base(c) { }
-        public ASTree IterControl() => GetChild(0);
+        public ForIterExpr IterControl() => (ForIterExpr)GetChild(0);
         public ASTree ForBody() => GetChild(1);
         public override string ToString() => "(for " + IterControl() + " " + ForBody() + ")";
 
@@ -23,11 +23,11 @@ namespace Sherringford.She.Ast
         {
             object ret = null;
             NestedEnvironment newScope = new NestedEnvironment(env);
-            ((ForIterExpr)IterControl()).Define().Eval(newScope);
-            while ((int)((ForIterExpr)IterControl()).Condition().Eval(newScope) == Environment.True)
+            IterControl().Define().Eval(newScope);
+            while ((int)(IterControl()).Condition().Eval(newScope) == Environment.True)
             {
                 ret = ForBody().Eval(newScope);
-                ((ForIterExpr)IterControl()).Next().Eval(newScope);
+                IterControl().Next().Eval(newScope);
             }
             return ret;
         }
