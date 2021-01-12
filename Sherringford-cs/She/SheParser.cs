@@ -66,13 +66,14 @@ namespace Sherringford.She
                 simple);
 
             this.module = Rule().Or(statement, Rule(typeof(NullStmnt))).Sep(";", Token.EOL);
+            FunctionParser();
             // this.program = Rule().Rep(module);
         }
 
         private void FunctionParser()
         {
             Parser parameter = Rule().Ident(typeof(Name), reserved);
-            Parser @params = Rule().Ast(parameter).Rep(Rule().Sep(",").Ast(parameter));
+            Parser @params = Rule(typeof(ParameterList)).Ast(parameter).Rep(Rule().Sep(",").Ast(parameter));
             Parser paramList = Rule().Sep("(").Maybe(@params).Sep(")");
             Parser def = Rule(typeof(FuncStmnt)).Sep("func").Ident(typeof(Name), reserved).Ast(paramList).Ast(block);
             Parser args = Rule(typeof(Arguments)).Ast(expr).Rep(Rule().Sep(",").Ast(expr));
