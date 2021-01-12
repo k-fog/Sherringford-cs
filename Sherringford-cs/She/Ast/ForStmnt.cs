@@ -24,7 +24,7 @@ namespace Sherringford.She.Ast
             object ret = null;
             NestedEnvironment newScope = new NestedEnvironment(env);
             IterControl().Define().Eval(newScope);
-            while ((int)(IterControl()).Condition().Eval(newScope) == Environment.True)
+            while ((int)IterControl().Condition().Eval(newScope) == Environment.True)
             {
                 ret = ForBody().Eval(newScope);
                 IterControl().Next().Eval(newScope);
