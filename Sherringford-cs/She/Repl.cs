@@ -25,31 +25,14 @@ namespace Sherringford.She
             while (true)
             {
                 WriteSystemMessage(prompt);
-
-                Stack<char> indent = new Stack<char>();
-                string input = Console.ReadLine();
-                if (string.IsNullOrEmpty(input)) break;
-
-                if (input.EndsWith('{')) indent.Push('{');
-                while (indent.Count > 0)
-                {
-                    WriteSystemMessage("--");
-                    input += Console.ReadLine();
-                    if (input.EndsWith('{')) indent.Push('{');
-                    if (input.EndsWith('}'))
-                    {
-                        indent.Pop();
-                    }
-                }
-
+                string input = ReadSource();
+                if (input == null) break;
                 Lexer lexer = new Lexer(new StringReader(input));
-
 
                 /*while (lexer.Peek(0) != Token.EOF)
                 {
                     Console.WriteLine($"{lexer.Peek(0).GetType()}:{lexer.Read()}");
                 }*/
-
 
                 SheParser parser = new SheParser();
                 ASTree ast = parser.Parse(lexer);
@@ -57,9 +40,28 @@ namespace Sherringford.She
                 if (SheInfo.Visualize) visualizer.Push(ast);
                 // Console.WriteLine(ast);
                 Console.WriteLine(ast.Eval(replEnvironment));
-                Console.WriteLine();
             }
             if (SheInfo.Visualize) visualizer.Visualize($"REPL_{SheInfo.StartTime:yyyy-MM-dd-HH-mm-ss}");
+        }
+
+        private string ReadSource()
+        {
+            Stack<char> indent = new Stack<char>();
+            string input = Console.ReadLine();
+            if (string.IsNullOrEmpty(input)) return null;
+
+            if (input.EndsWith('{')) indent.Push('{');
+            while (indent.Count > 0)
+            {
+                WriteSystemMessage("--");
+                input += Console.ReadLine();
+                if (input.EndsWith('{')) indent.Push('{');
+                if (input.EndsWith('}'))
+                {
+                    indent.Pop();
+                }
+            }
+            return input;
         }
 
         private void WriteSystemMessage(string s)
