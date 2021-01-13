@@ -75,7 +75,7 @@ namespace Sherringford.She.Ast
 
         public void Visualize(string fileName)
         {
-            top.Remove(top.Length - 3, 3);
+            if (top.Length > 3) top.Remove(top.Length - 3, 3);
             string dot = top.ToString();
             top.Replace(" ->", ";");
             string dot_p = "{rank=same;" + top.ToString() + "}\n";
@@ -86,6 +86,8 @@ namespace Sherringford.She.Ast
         {
             //command : dot.exe .\graph.dot -Kdot -Tjpg -Nfontname="$font" -Efontname="$font" -Gfontname="$font" -T png -o sample.png
             //Ricty Diminished Discord
+            if (source == null) return;
+            Directory.SetCurrentDirectory(SheInfo.TempDirectory);
             using (var dotFile = new StreamWriter(fileName + ".dot", false))
             {
                 dotFile.WriteLine("digraph d {");

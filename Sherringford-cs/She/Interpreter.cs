@@ -22,10 +22,12 @@ namespace Sherringford.She
             {
                 Lexer l = new Lexer(reader);
                 SheParser sp = new SheParser();
+                NestedEnvironment env = new NestedEnvironment();
                 while (l.Peek(0) != Token.EOF)
                 {
                     ASTree ast = sp.Parse(l);
-                    Console.WriteLine(ast);
+                    // Console.WriteLine(ast);
+                    Console.WriteLine(ast.Eval(env));
                     if (SheInfo.Visualize) visualizer.Push(ast);
                 }
             }

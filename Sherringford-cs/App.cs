@@ -14,7 +14,7 @@ namespace Sherringford
         public static string Environment { private set; get; }
         public static string UserName { private set; get; }
         public static string ExePath { private set; get; }
-        public static bool Visualize { set; get; } = false;
+        public static bool Visualize { set; get; } = true;
         public static string TempDirectory { set; get; } = @".\output";
         public static bool Setup()
         {
@@ -26,7 +26,6 @@ namespace Sherringford
             {
                 Directory.CreateDirectory(TempDirectory);
             }
-            Directory.SetCurrentDirectory(TempDirectory);
             return true;
         }
     }
@@ -44,6 +43,7 @@ namespace Sherringford
             }
             else
             {
+                Directory.SetCurrentDirectory(SheInfo.ExePath);
                 var runner = new Interpreter(args[0]);
                 runner.Run();
             }
