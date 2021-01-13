@@ -38,8 +38,8 @@ namespace Sherringford.She
                 ASTree ast = parser.Parse(lexer);
 
                 if (SheInfo.Visualize) visualizer.Push(ast);
-                Console.WriteLine(ast);
-                // Console.WriteLine(ast.Eval(replEnvironment));
+                //Console.WriteLine(ast);
+                Console.WriteLine(ast.Eval(replEnvironment));
             }
             if (SheInfo.Visualize) visualizer.Visualize($"REPL_{SheInfo.StartTime:yyyy-MM-dd-HH-mm-ss}");
         }

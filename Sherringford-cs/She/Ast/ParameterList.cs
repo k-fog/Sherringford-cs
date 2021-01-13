@@ -9,5 +9,6 @@ namespace Sherringford.She.Ast
         public ParameterList(List<ASTree> c) : base(c) { }
         public string Name(int i) => ((ASTLeaf)GetChild(i)).Token.ToString();
         public int Size() => NumChildren();
+        public void Eval(Environment env, int index, object value) => env.PutNew(Name(index), value);
     }
 }

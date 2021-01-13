@@ -8,5 +8,17 @@ namespace Sherringford.She.Ast
     {
         public Arguments(List<ASTree> c) : base(c) { }
         public int Size() => NumChildren();
+
+        public object Eval(Environment env, object value)
+        {
+            if (value.GetType() != typeof(SheFunction)) throw new SheException("bad function", this);
+            SheFunction func = (SheFunction)value;
+            ParameterList @params = func.Parameters;
+            if (Size() != @params.Size()) throw new SheException("bad number of arguments", this);
+            Environment newEnv = new NestedEnvironment(env);
+            int num = 0;
+            foreach (ASTree ast in this) { @params.Eval(newEnv, num++, ast.Eval(env)); }
+            return func.Body.Eval(newEnv);
+        }
     }
 }
