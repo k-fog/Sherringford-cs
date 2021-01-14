@@ -15,6 +15,7 @@ namespace Sherringford.She
         public Repl()
         {
             this.replEnvironment = new NestedEnvironment();
+            Natives.AppendNatives(this.replEnvironment);
         }
 
         public void Start()

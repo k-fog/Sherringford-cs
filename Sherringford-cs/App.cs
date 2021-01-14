@@ -43,7 +43,6 @@ namespace Sherringford
             }
             else
             {
-                Directory.SetCurrentDirectory(SheInfo.ExePath);
                 var runner = new Interpreter(args[0]);
                 runner.Run();
             }
