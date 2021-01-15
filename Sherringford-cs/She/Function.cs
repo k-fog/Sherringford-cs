@@ -61,6 +61,8 @@ namespace Sherringford.She
                 return null;
             }));
             env.PutNew("input", new NativeFunction("input", () => Console.ReadLine()));
+            env.PutNew("currentTime", new NativeFunction("currentTime",
+                () => (int)((DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds % 1e9)));
         }
     }
 }
