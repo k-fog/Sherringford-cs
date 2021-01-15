@@ -24,6 +24,7 @@ namespace Sherringford.She.Ast
             else if (value.GetType() == typeof(NativeFunction))
             {
                 NativeFunction func = (NativeFunction)value;
+                if(func.NumParams != NumChildren()) throw new SheException("bad number of arguments", this);
                 object[] @params = new object[NumChildren()];
                 for (int i = 0; i < NumChildren(); i++) @params[i] = GetChild(i).Eval(env);
                 return func.Invoke(@params, this);
