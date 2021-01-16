@@ -26,15 +26,16 @@ namespace Sherringford.She
         public int NumParams { private set; get; }
         private Func<object[], object> method;
         private Func<object> method0;
+        public static readonly int VariadicArg = -1;
 
-        public NativeFunction(string name, Func<object[], object> m)
+        public NativeFunction(string name, int numParams, Func<object[], object> m)
         {
             this.Name = name;
             this.method = m;
-            this.NumParams = m.GetMethodInfo().GetParameters().Length;
+            this.NumParams = numParams;
         }
 
-        public NativeFunction(string name, Func<object> m)
+        public NativeFunction(string name, int numParams, Func<object> m)
         {
             this.Name = name;
             this.method0 = m;
@@ -54,14 +55,14 @@ namespace Sherringford.She
     {
         public static void AppendNatives(Environment env)
         {
-            env.PutNew("print", new NativeFunction("print", x =>
+            env.PutNew("print", new NativeFunction("print", NativeFunction.VariadicArg, x =>
             {
                 foreach (var item in x) Console.Write(item);
                 Console.WriteLine();
                 return null;
             }));
-            env.PutNew("input", new NativeFunction("input", () => Console.ReadLine()));
-            env.PutNew("currentTime", new NativeFunction("currentTime",
+            env.PutNew("input", new NativeFunction("input", 0, () => Console.ReadLine()));
+            env.PutNew("currentTime", new NativeFunction("currentTime", 0,
                 () => (int)((DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds % 1e9)));
         }
     }
