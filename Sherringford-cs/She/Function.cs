@@ -39,7 +39,7 @@ namespace Sherringford.She
         {
             this.Name = name;
             this.method0 = m;
-            this.NumParams = 0;
+            this.NumParams = numParams == 0 ? 0 : throw new ArgumentOutOfRangeException($"error at create native function {name}");
         }
 
         public object Invoke(object[] args, ASTree tree)
