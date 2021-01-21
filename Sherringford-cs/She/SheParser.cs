@@ -20,6 +20,11 @@ namespace Sherringford.She
             this.reserved.Add(Token.EOL);
 
             this.operators.Add("=", 1, Operators.Right);
+            this.operators.Add("+=", 1, Operators.Right);
+            this.operators.Add("-=", 1, Operators.Right);
+            this.operators.Add("*=", 1, Operators.Right);
+            this.operators.Add("/=", 1, Operators.Right);
+            this.operators.Add("%=", 1, Operators.Right);
             this.operators.Add("==", 2, Operators.Left);
             this.operators.Add(">", 2, Operators.Left);
             this.operators.Add("<", 2, Operators.Left);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Sherringford.She.Ast
 {
@@ -11,20 +12,31 @@ namespace Sherringford.She.Ast
         public string Operator() => ((ASTLeaf)GetChild(1)).Token.ToString();
         public ASTree Right() => GetChild(2);
 
+        private static readonly string[] compoundAssignmentOp = { "+=", "-=", "*=", "/=", "%=" };
+
         public override object Eval(Environment env)
         {
-            if (Operator().ToString() == "=")
-            {
-                object right = Right().Eval(env);
-                return ComputeAssign(env, right);
-            }
+            string op = Operator().ToString();
+            if (op == "=") return ComputeAssign(env, Right().Eval(env));
+            else if (compoundAssignmentOp.Contains(op)) return ComputeCompoundAssignmentOp(env, op, Right().Eval(env));
             else
             {
                 object left = ((ASTree)Left()).Eval(env);
                 object right = ((ASTree)Right()).Eval(env);
-                return ComputeOp(left, Operator().ToString(), right);
+                return ComputeOp(left, op, right);
             }
+        }
 
+        private object ComputeCompoundAssignmentOp(Environment env, string op, object rvalue)
+        {
+            string variable = ((Name)Left()).TheName();
+            object lvalue = env.Get(variable);
+            if (op == "+=") lvalue = ComputeOp(lvalue, "+", rvalue);
+            else if (op == "-=") lvalue = ComputeOp(lvalue, "-", rvalue);
+            else if (op == "*=") lvalue = ComputeOp(lvalue, "*", rvalue);
+            else if (op == "/=") lvalue = ComputeOp(lvalue, "/", rvalue);
+            else if (op == "%=") lvalue = ComputeOp(lvalue, "%", rvalue);
+            return ComputeAssign(env, lvalue);
         }
 
         private object ComputeAssign(Environment env, Object rvalue)

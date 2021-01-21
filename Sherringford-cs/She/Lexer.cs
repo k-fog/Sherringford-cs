@@ -9,7 +9,7 @@ namespace Sherringford.She
 {
     class Lexer
     {
-        private static readonly string Ident = @"[A-Z_a-z][A-Z_a-z0-9]*|==|<=|>=|&&|\|\||\p{S}|\p{P}";
+        private static readonly string Ident = @"[A-Z_a-z][A-Z_a-z0-9]*|==|<=|>=|\+=|-=|\*=|\/=|%=|&&|\|\||\p{S}|\p{P}";
         private static readonly string IntNum = @"[0-9]+";
         private static readonly string FloatNum = @"[0-9]+\.[0-9]*";
         private static readonly string String = "\"(\\\\\"|\\\\\\\\|\\\\n|[^\"])*\"";
