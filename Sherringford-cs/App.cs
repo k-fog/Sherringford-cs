@@ -9,7 +9,7 @@ namespace Sherringford
 {
     static class SheInfo
     {
-        public static readonly string Version = "0.2.3";
+        public static readonly string Version = "0.2.4";
         public static DateTime StartTime { private set; get; }
         public static string Environment { private set; get; }
         public static string UserName { private set; get; }
