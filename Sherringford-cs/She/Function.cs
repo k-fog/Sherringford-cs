@@ -62,6 +62,8 @@ namespace Sherringford.She
                 return null;
             }));
             env.PutNew("input", new NativeFunction("input", 0, () => Console.ReadLine()));
+            env.PutNew("int", new NativeFunction("int", 1, (x) => x[0] as int?));
+            env.PutNew("typeof", new NativeFunction("typeof", 1, (x) => x[0].GetType().ToString()));
             env.PutNew("currentTime", new NativeFunction("currentTime", 0,
                 () => (int)((DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds % 1e9)));
         }

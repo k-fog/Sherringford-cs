@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Sherringford.She
@@ -48,21 +49,19 @@ namespace Sherringford.She
         private string ReadSource()
         {
             Stack<char> indent = new Stack<char>();
-            string input = Console.ReadLine();
-            if (string.IsNullOrEmpty(input)) return null;
+            StringBuilder input = new StringBuilder(Console.ReadLine());
+            if (string.IsNullOrEmpty(input.ToString())) return null;
 
-            if (input.EndsWith('{')) indent.Push('{');
+            for (int i = 0; i < input.ToString().Count(c => c == '{'); i++) indent.Push('{');
             while (indent.Count > 0)
             {
                 WriteSystemMessage("--");
-                input += Console.ReadLine();
-                if (input.EndsWith('{')) indent.Push('{');
-                if (input.EndsWith('}'))
-                {
-                    indent.Pop();
-                }
+                string line = Console.ReadLine();
+                for (int i = 0; i < line.Count(c => c == '{'); i++) indent.Push('{');
+                for (int i = 0; i < line.Count(c => c == '}'); i++) indent.Pop();
+                input.Append(line);
             }
-            return input;
+            return input.ToString();
         }
 
         private void WriteSystemMessage(string s)
