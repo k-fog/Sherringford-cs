@@ -13,8 +13,8 @@ namespace Sherringford.She.Ast
         public override object Eval(Environment env)
         {
             int s = NumChildren();
-            object[] res = new object[s];
-            for (int i = 0; i < s; i++) res[i] = GetChild(i).Eval(env);
+            SheArray res = new SheArray(s);
+            for (int i = 0; i < s; i++) res.Add(GetChild(i).Eval(env));
             return res;
         }
     }
