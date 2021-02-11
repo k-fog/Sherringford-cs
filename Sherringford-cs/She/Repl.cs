@@ -42,6 +42,7 @@ namespace Sherringford.She
                 if (SheInfo.Visualize) visualizer.Push(ast);
                 //Console.WriteLine(ast);
                 Console.WriteLine(ast.Eval(replEnvironment));
+                Console.WriteLine();
             }
             if (SheInfo.Visualize) visualizer.Visualize($"REPL_{SheInfo.StartTime:yyyy-MM-dd-HH-mm-ss}");
         }

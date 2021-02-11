@@ -12,7 +12,7 @@ namespace Sherringford.She.Ast
 
         public object Eval(Environment env, object value)
         {
-            if(value is object[] list)
+            if(value is SheArray list)
             {
                 object index = Index().Eval(env);
                 if (index is int i) return list[i];
