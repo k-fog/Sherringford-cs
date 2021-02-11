@@ -9,7 +9,7 @@ namespace Sherringford.She.Ast
         public PrimaryExpr(List<ASTree> c) : base(c) { }
         public static ASTree Create(List<ASTree> c) => c.Count == 1 ? c[0] : new PrimaryExpr(c);
         public ASTree Operand() => GetChild(0);
-        public Arguments Postfix(int nest) => (Arguments)GetChild(NumChildren() - nest - 1);
+        public Postfix Postfix(int nest) => (Postfix)GetChild(NumChildren() - nest - 1);
         public bool HasPostfix(int nest) => NumChildren() - nest > 1;
 
         public override object Eval(Environment env) => EvalSubExpr(env, 0);
@@ -18,7 +18,10 @@ namespace Sherringford.She.Ast
             if (HasPostfix(nest))
             {
                 object target = EvalSubExpr(env, nest + 1);
-                return ((Arguments)Postfix(nest)).Eval(env, target);
+                object p = Postfix(nest);
+                if (p is Arguments arg) return arg.Eval(env, target);
+                else if (p is ArrayRef arr) return arr.Eval(env, target);
+                else throw new SheException("bad postfix");
             }
             else return Operand().Eval(env);
         }

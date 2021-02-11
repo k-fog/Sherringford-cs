@@ -10,7 +10,7 @@ namespace Sherringford.She
     {
         private HashSet<string> reserved = new HashSet<string>();
         private Operators operators = new Operators();
-        private Parser expr, factor, simple, primary, block, module, proram;
+        private Parser expr, factor, simple, primary, block, module, postfix, proram;
 
 
         public SheParser()
@@ -72,6 +72,7 @@ namespace Sherringford.She
 
             this.module = Rule().Or(statement, Rule(typeof(NullStmnt))).Sep(";", Token.EOL);
             FunctionParser();
+            ArrayParser();
             // this.program = Rule().Rep(module);
         }
 
@@ -82,11 +83,19 @@ namespace Sherringford.She
             Parser paramList = Rule().Sep("(").Maybe(@params).Sep(")");
             Parser def = Rule(typeof(FuncStmnt)).Sep("func").Ident(typeof(Name), reserved).Ast(paramList).Ast(block);
             Parser args = Rule(typeof(Arguments)).Ast(expr).Rep(Rule().Sep(",").Ast(expr));
-            Parser postfix = Rule().Sep("(").Maybe(args).Sep(")");
+            postfix = Rule().Sep("(").Maybe(args).Sep(")");
             reserved.Add(")");
             primary.Rep(postfix);
             simple.Option(args);
             module.InsertChoice(def);
+        }
+
+        private void ArrayParser()
+        {
+            Parser elements = Rule(typeof(ArrayLiteral)).Ast(expr).Rep(Rule().Sep(",").Ast(expr));
+            reserved.Add("]");
+            primary.InsertChoice(Rule().Sep("[").Maybe(elements).Sep("]"));
+            postfix.InsertChoice(Rule(typeof(ArrayRef)).Sep("[").Ast(expr).Sep("]"));
         }
 
         public ASTree Parse(Lexer lexer)

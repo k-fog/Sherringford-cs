@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sherringford.She.Ast
 {
-    class Arguments : ASTList
+    class Arguments : Postfix
     {
         public Arguments(List<ASTree> c) : base(c) { }
         public int Size() => NumChildren();
