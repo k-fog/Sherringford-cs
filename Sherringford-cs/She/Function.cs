@@ -62,11 +62,12 @@ namespace Sherringford.She
                 return null;
             }));
             env.PutNew("input", new NativeFunction("input", 0, () => Console.ReadLine()));
-            env.PutNew("toInt", new NativeFunction("toInt", 1, (x) => int.TryParse(x[0]));
+            env.PutNew("int", new NativeFunction("int", 1, (x) => x[0] as int?));
+            env.PutNew("typeof", new NativeFunction("typeof", 1, (x) => x[0].GetType().ToString()));
             env.PutNew("currentTime", new NativeFunction("currentTime", 0,
                 () => (int)((DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds % 1e9)));
-            env.PutNew("typeof", new NativeFunction("typeof", 1,
-                (x) => x[0].GetType().ToString()));
+            env.PutNew("len", new NativeFunction("len", 1, 
+                (x) => x[0] is SheArray arr ? arr.Count : throw new SheException("len: argument type must be SheArray")));
         }
     }
 }
